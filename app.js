@@ -15,16 +15,31 @@ app.get('/on/:pin', function(req, res) {
   });
 });
 
-app.get('/off/:pin', function(req, res) {
+const led = new Gpio(17, {mode: Gpio.OUTPUT});
+
+app.get('/on/:pin', function(req, res) {
   gpioPin = req.params.pin;
 	gpio.close(gpioPin);
   gpio.open(gpioPin, "output", function(err) {
-		gpio.write(gpioPin, 0, function() {
-			console.log('Pin '+ gpioPin +' is now LOW.');
+    gpio.write(gpioPin, 1, function() {
+      console.log('Pin '+ gpioPin +' is now HIGH.');
 			res.sendStatus(200);
-		});
+    });
   });
 });
+
+app.get('/pulse/:pin', function(req, res) {
+	let dutyCycle = 0;
+
+	setInterval(() => {
+	  led.pwmWrite(dutyCycle);
+
+	  dutyCycle += 5;
+	  if (dutyCycle > 255) {
+	    dutyCycle = 0;
+	  }
+	}, 20);
+	});
 
 app.get('/blink/:pin/:time', function(req, res) {
 	gpioPin = req.params.pin;
