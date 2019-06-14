@@ -1,0 +1,17 @@
+nes (15 sloc)  382 Bytes
+    
+{
+  "name": "rocket-league-pi",
+  "version": "0.0.1",
+  "description": "Express server script for a RESTful API to access the Raspberry Pi's GPIO pins.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.4",
+    "pi-gpio": "0.0.8"
+  }
+}
