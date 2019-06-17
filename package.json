@@ -10,6 +10,6 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
-    "pi-gpio": "^0.0.8"
+    "pigpio": "^1.2.3"
   }
 }
