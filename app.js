@@ -1,63 +1,18 @@
-var http = require('http');
-var express = require('express');
-var app = express();
+const express = require('express');
+const app = express();
+const Gpio = require('pigpio').Gpio;
 
-var gpio = require("pi-gpio");
-
-app.get('/on/:pin', function(req, res) {
-  gpioPin = req.params.pin;
-	gpio.close(gpioPin);
-  gpio.open(gpioPin, "output", function(err) {
-    gpio.write(gpioPin, 1, function() {
-      console.log('Pin '+ gpioPin +' is now HIGH.');
-			res.sendStatus(200);
-    });
-  });
+app.post('/on/:pin', (req, res) => {
+  const pin = new Gpio(req.params.pin, { mode: Gpio.OUTPUT });
+  pin.digitalWrite(1);
+  console.log(`Turned Pin #${req.params.pin} On!`);
 });
 
-const led = new Gpio(17, {mode: Gpio.OUTPUT});
-
-app.get('/on/:pin', function(req, res) {
-  gpioPin = req.params.pin;
-	gpio.close(gpioPin);
-  gpio.open(gpioPin, "output", function(err) {
-    gpio.write(gpioPin, 1, function() {
-      console.log('Pin '+ gpioPin +' is now HIGH.');
-			res.sendStatus(200);
-    });
-  });
-});
-
-app.get('/pulse/:pin', function(req, res) {
-	let dutyCycle = 0;
-
-	setInterval(() => {
-	  led.pwmWrite(dutyCycle);
-
-	  dutyCycle += 5;
-	  if (dutyCycle > 255) {
-	    dutyCycle = 0;
-	  }
-	}, 20);
-	});
-
-app.get('/blink/:pin/:time', function(req, res) {
-	gpioPin = req.params.pin;
-	time = req.params.time;
-	gpio.close(gpioPin);
-  gpio.open(gpioPin, "output", function(err) {
-    gpio.write(gpioPin, 1, function() {
-      console.log('Pin '+ gpioPin +' is now HIGH.');
-    });
-    setTimeout(function() {
-      gpio.write(gpioPin, 0, function() {
-        console.log('Pin '+ gpioPin +' is now LOW.');
-				res.sendStatus(200);
-        gpio.close(gpioPin);
-      });
-    }, time);
-  });
+app.post('/off/:pin', (req, res) => {
+  const pin = new Gpio(req.params.pin, { mode: Gpio.OUTPUT });
+  pin.digitalWrite(0);
+  console.log(`Turned Pin #${req.params.pin} Off!`);
 });
 
 app.listen(3000);
-console.log('App Server running at port 3000');
+console.log('PiCar Server Running on Port 3000!');
